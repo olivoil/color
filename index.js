@@ -44,8 +44,7 @@ function tint(color, v) {
     , r = colors[0]
     , g = colors[1]
     , b = colors[2]
-
-  console.log(colors);
+    , a = colors[3] || 1
 
   r = Math.abs(colors[0]+v); if (r>255) r=r-(r-255);
   g = Math.abs(colors[1]+v); if (g>255) g=g-(g-255);
@@ -58,7 +57,8 @@ function tint(color, v) {
   b = Number(b < 0 || isNaN(b)) ? 0 : ((b > 255) ? 255 : b).toString(16);
   if (b.length == 1) b = '0' + b;
 
-  return "#" + r + g + b;
+  var hex = rgb("#" + r + g + b);
+  return "rgba(" + hex[0] + "," + hex[1] + "," + hex[2] + "," + a + ")";
 }
 
 /**
@@ -84,9 +84,8 @@ function rgb(color){
   var start = color.substring(0, 3);
 
   if(start.toLowerCase() === 'rgb'){
-    var match = color.match(/^rgba?\((\d+)\W+(\d+)\W+(\d+)/i);
-    var rgba = match.slice(1).map(function(str){ return parseInt(str, 10) });
-    console.log(match, rgba);
+    var match = color.match(/^rgba?\((\d+)\W+(\d+)\W+(\d+)(\W+(\.\d+))?/i);
+    var rgba = match.slice(1).map(function(str){ return parseFloat(str, 10) }).filter(function(v){ return v });
   } else {
     color = color.replace(/^#/, '');
     color = (color.length == 3) ? hex3tohex6(color) : color;
