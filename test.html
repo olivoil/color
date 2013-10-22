@@ -1,33 +1,62 @@
 <html>
 <head>
   <title>color component</title>
-  <link rel="stylesheet" href="../build/build.css">
+  <link rel="stylesheet" href="./build/build.css">
   <style type="text/css">
-    div {
+    div.test {
       width: 100px;
-      height: 100px;
+      height: 150px;
+      border: solid 1px;
+      margin: 20px;
+      width: 350px;
     }
   </style>
 </head>
 <body>
   <h1>color component</h1>
-  <div id="light">light</div>
-  <div id="nuetral">nuetral</div>
-  <div id="dark">dark</div>
-  <script src="../build/build.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    var color = require('color'),
-        light = document.getElementById('light'),
-        nuetral = document.getElementById('nuetral'),
-        dark = document.getElementById('dark');
 
-    var col = 'red',
-        darken = color.darken(col, .5);
-        lighten = color.lighten(col, .5);
-    console.log(darken, col, lighten);
-    light.style.backgroundColor = lighten;
-    dark.style.backgroundColor = darken;
-    nuetral.style.backgroundColor = col;
+  <div id="color-template">
+    <h2></h2>
+    <div class="light">light</div>
+    <div class="neutral">neutral</div>
+    <div class="dark">dark</div>
+  </div>
+
+  <script src="./build/build.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var color = require('color')
+      , template = document.getElementById('color-template');
+
+    function test(col){
+      var container = template.cloneNode(true)
+        , light = container.querySelector('.light')
+        , neutral = container.querySelector('.neutral')
+        , dark = container.querySelector('.dark')
+
+      var darken = color.darken(col, .5)
+        , lighten = color.lighten(col, .5)
+
+      var title = container.querySelector('h2')
+      title.innerText = col;
+      container.setAttribute('id', col);
+      container.className = 'test';
+
+      console.log(lighten, col, darken);
+
+      light.style.backgroundColor = lighten;
+      dark.style.backgroundColor = darken;
+      neutral.style.backgroundColor = col;
+
+      document.body.appendChild(container);
+    }
+
+    test('red');
+    test('#234543');
+    test('rgb(223, 45, 60)');
+    test('rgba(223, 45, 60, .5)');
+
+    template.setAttribute('style', "display: none;");
+
   </script>
 </body>
 </html>
